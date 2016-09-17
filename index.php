@@ -1,7 +1,6 @@
 <pre>
 <?php
 if(isset($_FILES['arquivo'])){
-    echo 'teste';
    if(count($_FILES['arquivo']['tmp_name']) >0) {
        for($q=0;$q<count($_FILES['arquivo']['tmp_name']);$q++){
            $nomedoarquivo = md5($_FILES['arquivo']['tmp_name'][$q].time().rand(0,999));
@@ -11,12 +10,13 @@ if(isset($_FILES['arquivo'])){
 }
 ?>
 </pre>
+<script src="js/meujs.js" type="text/javascript"></script>
 <form method="POST" enctype="multipart/form-data">
     <h2>Arquivos:<h2/><br/>
      
-    <input type="file" name="arquivo[]" multiple/> <br/><br/>
+    <input type="file" name="arquivo[]" multiple onchange="habilitaBtn()" /> <br/><br/>
     <div>
-    <input type="submit" value="Enviar Arquivos"/>  
+    <input type="submit" value="Enviar Arquivos" name="enviar"/>  
     </div>
     </form>
 
@@ -37,3 +37,22 @@ if(isset($_SERVER['CONTENT_LENGTH'])){
 }
 ?>
 </pre>
+<script type="text/javascript">
+    function habilitaBtn() {
+        var elements = document.getElementsByTagName(name["arquivo[]"]);
+        alert(elements.value);
+       
+        var fileUpload = document.getElementById("arquivo");
+        var enviar = document.getElementById("enviar");
+        enviar.addEventListener("click", function (event) {
+            if (fileUpload.files.length == 0) {
+                alert("Nenhum Arquivo Selecionado");
+                return;
+            }
+            if (fileUpload.files[0].type.indexOf("image") != 0) {
+                alert("Este arquivo não é uma imagem");
+                return;
+            }
+        });
+    }
+</script>
