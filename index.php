@@ -10,11 +10,12 @@ if(isset($_FILES['arquivo'])){
 }
 ?>
 </pre>
+<script src="js/jquery-3.0.0.min.js" type="text/javascript"></script>
 <script src="js/meujs.js" type="text/javascript"></script>
 <form method="POST" enctype="multipart/form-data">
     <h2>Arquivos:<h2/><br/>
      
-    <input type="file" name="arquivo[]" multiple onchange="habilitaBtn()" /> <br/><br/>
+    <input id="arquivo" type="file" name="arquivo[]" multiple  /> <br/><br/>
     <div>
     <input type="submit" value="Enviar Arquivos" name="enviar"/>  
     </div>
@@ -26,33 +27,28 @@ if(isset($_FILES['arquivo'])){
  //   for($cont=0;$cont<=count($_FILES['arquivo']['tmp_name']); $cont++){
  //       echo  $_FILES['arquivo']['tmp_name'][$cont];
  //   }
-    print_r($_FILES);
-}
-$max = ini_get('post_max_size');
 
-echo $max.'<br/>';
+    print_r($_FILES);
+    
+}
+$max = ini_get('post_max_size')*1024;
+
+
+echo "Suporta arquivo do tamanho de ".$max.'<br/><br/>';
+
 if(isset($_SERVER['CONTENT_LENGTH'])){
-    $server = $_SERVER['CONTENT_LENGTH'];
-    echo $server;
+    $server = ($_SERVER['CONTENT_LENGTH']/1024);
+    echo "Arquivo enviado de ".$server.'<br/><br/>';
+    $falta = $max-$server;
+   
+    if($falta >0){
+    echo "Ainda cabe mais ". $falta."<br/>";
+      echo "Importado com sucesso.";
+    }else if($falta <0){
+         echo "Arquivo grande, o arquivo suportado eh ". $falta ." menor que o arquivo enviado <br/>";
+         echo "Atenção importe novamente o arquivo";
+    }
+    
 }
 ?>
 </pre>
-<script type="text/javascript">
-    function habilitaBtn() {
-        var elements = document.getElementsByTagName(name["arquivo[]"]);
-        alert(elements.value);
-       
-        var fileUpload = document.getElementById("arquivo");
-        var enviar = document.getElementById("enviar");
-        enviar.addEventListener("click", function (event) {
-            if (fileUpload.files.length == 0) {
-                alert("Nenhum Arquivo Selecionado");
-                return;
-            }
-            if (fileUpload.files[0].type.indexOf("image") != 0) {
-                alert("Este arquivo não é uma imagem");
-                return;
-            }
-        });
-    }
-</script>
